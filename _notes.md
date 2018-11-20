@@ -4,12 +4,12 @@
 * virEnv = virtual environment
 * envVar = environmental variable
 ## Commands
-### To reestablish a connection & return to work
-* From terminal, navigate to apps root folder
-    * source venv/scripts/activate
-    * FLASK_APP=sumName.py
-    * flask run
-* From browser, navigate to http://127.0.0.1:5000/ or http://localhost:5000/
+### The restart the App server:
+1. Terminal into app folder
+2. venv\Scripts\activate (Start virEnv)
+3. FLASK_APP=microblog.py (sumName.py)
+4. flask run
+5. In browser, navigate to server, 127.0.0.1 or localhost:5000
 ### All Commands
 * python -m venv venv
     * creates virEnv
@@ -31,3 +31,9 @@
 * pip install flask-wtf
     * 1st flask extension added
     * wrapper around the WTForms package
+* pip install flask-sqlalchemy
+* pip install flask-migrate
+* flask db init
+* flask db migrate -m "messagesGoesHere"
+* flask db upgrade
+* 
