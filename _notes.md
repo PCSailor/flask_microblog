@@ -10,7 +10,10 @@
 3. FLASK_APP=microblog.py (sumName.py)
 4. flask run
 5. In browser, navigate to server, 127.0.0.1 or localhost:5000
+# 
 ### All Commands
+* pip install --upgrade pip
+* pip install flask
 * python -m venv venv
     * creates virEnv
 * source venv/scripts/activate
@@ -36,4 +39,6 @@
 * flask db init
 * flask db migrate -m "messagesGoesHere"
 * flask db upgrade
+* flask shell
+    * python interrupter run in the context of an application
 * 

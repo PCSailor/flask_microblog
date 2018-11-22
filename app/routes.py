@@ -1,6 +1,6 @@
 '''
 '''
-from flask import render_template, flash, redirect
+from flask import render_template, flash, redirect, url_for
 from app import app
 from app.forms import LoginForm # import the Login class from forms.py, instantiated an object from it, & sent it to the template
 # Decorators modifiy the function that follows it
