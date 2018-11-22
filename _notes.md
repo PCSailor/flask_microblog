@@ -1,6 +1,8 @@
 # Setup of a Flask Microblog
 ### from Flask Mega-Tutorial by M. Grinberg
-## Abbreviations
+# Log:
+1. app.db changed to app_db.db & back to app.db
+# Abbreviations
 * virEnv = virtual environment
 * envVar = environmental variable
 ## Commands

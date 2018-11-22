@@ -20,7 +20,7 @@ def index():
         }
     ]
     return render_template('index.html', title='Home', user=user, posts=posts)
-
+'''
 @app.route('/login', methods=['GET', 'POST']) # decorator # BUG: if kept above login screen fails
 def login():
     form = LoginForm()
@@ -28,3 +28,4 @@ def login():
         flash('Login requested for user {}, remember_me={}'.format(form.username.data, form.remember_me.data))
         return redirect(url_for('index')) # return redirect('/index')
     return render_template('login.html', title='Sign In', form=form)
+    '''

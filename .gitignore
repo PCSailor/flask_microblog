@@ -1,6 +1,9 @@
-# Ignore folder named 'venv'
+# Ignore folder named 'venv/'
 venv/
-# Ignore folder named '__pycache__'
+# Ignore folder named '__pycache__/'
 __pycache__/
-# Ignore folder named archived'
+# Ignore folder named archived/'
 archived/
+
+# Ignore folder named venv_uhg_2018-11-20/'
+venv_uhg_2018-11-20/
