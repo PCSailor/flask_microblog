@@ -4,6 +4,7 @@ venv/
 __pycache__/
 # Ignore folder named archived/'
 archived/
-
 # Ignore folder named venv_uhg_2018-11-20/'
 venv_uhg_2018-11-20/
+# Ignore folder named venv_1st-homePC/'
+venv_1st-homePC/
