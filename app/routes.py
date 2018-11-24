@@ -16,7 +16,7 @@ from werkzeug.urls import url_parse
 
 def index(): #4
     # return "routes.py is hea!!" #5
-    user = {'username': 'Phil'}
+    # user = {'username': 'Phil'}
     posts = [ # a list
         { # dictionary
             'author': {'username': 'Phil'},
@@ -27,7 +27,7 @@ def index(): #4
             'body': 'Post #2 comng from routes.py.'
         }
     ]
-    return render_template('index.html', title='Home', user=user, posts=posts)
+    return render_template('index.html', title='Home', posts=posts)
 
 @app.route('/login', methods=['GET', 'POST']) # decorator # BUG: if kept above login screen fails
 def login():
@@ -35,7 +35,7 @@ def login():
         return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit(): # method doing all from processing
-        user = User.query.filter_by(username=form.userform.data).first() # query db for entered user name
+        user = User.query.filter_by(username=form.username.data).first() # query db for entered user name
         if user is None or not user.check_password(form.password.data):
             flash('Invalid user name or password')
             return redirect(url_for('login'))
