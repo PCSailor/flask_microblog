@@ -1,6 +1,9 @@
 '''
 * db.Model is a base class of SQLAlchemy
 * __repr__ tells how to print objects of this class
+* Every time the database is modified it is necessary to generate a database migration. 
+    * flask db migrate -m "sumComment"
+    * flask db upgrade
 '''
 from datetime import datetime
 from app import db, login # unknown error when switching computers
@@ -14,6 +17,8 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     posts = db.relationship('Post', backref='author', lazy='dynamic')
+    about_me = db.Column(db.String(140))
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)

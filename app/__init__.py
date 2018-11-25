@@ -4,11 +4,9 @@
 '''
 from flask import Flask #1
 from config import Config
-from flask_sqlalchemy import SQLAlchemy #
 from flask_migrate import Migrate #
+from flask_sqlalchemy import SQLAlchemy #
 from flask_login import LoginManager # 
-
-
 
 app = Flask(__name__) #2 an instance of class Flask within the __init__.py script
 app.config.from_object(Config) # reads & applies the config.py file

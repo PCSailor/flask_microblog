@@ -3,8 +3,8 @@ pg26
 This is the login form
 '''
 from flask_wtf import FlaskForm # baseclass
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo # DataRequired=checks field not submitted empty
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SubmitField
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length # DataRequired=checks field not submitted empty
 from app.models import User
 
 class LoginForm(FlaskForm): # LoginForm class created
@@ -34,5 +34,9 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('Please use a different email address')
 
+class EditProfileForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    about_me = TextAreaField('About me', validators=[Length(min=0, max=140)]) # TextAreaField=multi-line text box
+    submit = SubmitField('Submit')
 
 

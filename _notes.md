@@ -4,7 +4,7 @@
 * __init.py__
 * routes.py
 * microblog.py
-    * Path soFar:
+    * Path so Far:
         * mircoblog
         *   venv/
         *       app/
@@ -13,7 +13,7 @@
         * microblog.py
 * index.html
 * 
-* 
+* _post.html: the _ prefix is just a naming convention to help recognize which template files are sub-templates. This sub-template renders one post, referenced from user.html & index.html
 * 
 * 
 
