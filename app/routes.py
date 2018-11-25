@@ -14,7 +14,6 @@ from werkzeug.urls import url_parse
 @app.route('/') #2 # decorator
 @app.route('/index') #3 # decorator
 @login_required
-
 def index(): #4
     # return "routes.py is hea!!" #5
     # user = {'username': 'Phil'}
@@ -30,6 +29,7 @@ def index(): #4
     ]
     return render_template('index.html', title='Home', posts=posts)
 
+# Log in
 @app.route('/login', methods=['GET', 'POST']) # decorator # BUG: if kept above login screen fails
 def login():
     if current_user.is_authenticated:
@@ -48,15 +48,20 @@ def login():
         # return redirect(url_for('index')) # return redirect('/index')
     return render_template('login.html', title='Sign In', form=form)
 
+# Log Out
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
+# Register
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    '''
+    Logic done inside 'if validate_on_submit()' conditional creates new user with username-email-password, writes it to database, & redirects to login prompt so user can log in
+    '''
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('index')) # ensure the user is not logged in
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
@@ -66,3 +71,15 @@ def register():
         flash('Congratulations, you are now registered')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+# Create User Profile
+@app.route('/user/<username>')
+@login_required
+def user(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    posts = [
+        {'author': user, 'body': 'Post from routes.py/user() function #1'},
+        {'author': user, 'body': 'Post from routes.py/user() function #2'}
+    ]
+    return render_template('user.html', user=user, posts=posts)
+        
