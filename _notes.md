@@ -12,11 +12,6 @@
         *               routes.py
         * microblog.py
 * index.html
-* 
-* _post.html: the _ prefix is just a naming convention to help recognize which template files are sub-templates. This sub-template renders one post, referenced from user.html & index.html
-* 
-* 
-
 # Log:
 1. app.db changed to app_db.db & back to app.db
 # Abbreviations
@@ -60,3 +55,10 @@
 * flask shell
     * python interrupter run in the context of an application
 * 
+* _post.html: the _ prefix is just a naming convention to help recognize which template files are sub-templates. This sub-template renders one post, referenced from user.html & index.html
+* Debug mode activated:
+    1. stop the app
+    2. set this environment variable in (venv) terminal:
+        * set FLASK_DEBUG=1
+            * 'set'(Windows) or 'export'(Bash/Unix/Mac)
+    3. restart the server (flask run)

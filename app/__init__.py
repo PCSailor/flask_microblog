@@ -15,4 +15,4 @@ migrate = Migrate(app, db) #
 login = LoginManager(app)
 login.login_view = 'login'
 
-from app import routes, models #3 'app' refers to folder # routes always-at-bottom due to 'circular imports'
+from app import routes, models, errors #3 'app' refers to folder # routes always-at-bottom due to 'circular imports'
