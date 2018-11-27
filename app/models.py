@@ -11,6 +11,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
 
+# followers association table
 followers = db.Table('followers',
     db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
@@ -38,7 +39,20 @@ class User(UserMixin, db.Model):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
 
-    # followers
+    def follow(self, user): # add/remove followers
+        if not self.is_following(user):
+            self.followed.append(user)
+    
+    def unfollow(self, user): # add/remove followers
+        if self.is_following(user):
+            self.followed.remove(user)
+    
+    def is_following(self, user): # add/remove followers
+       return self.followed.filter(
+        followers.c.followed_id == user.id).count() > 0 
+
+
+    # Many-to-many followers relationship
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
