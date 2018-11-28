@@ -25,6 +25,13 @@ class User(UserMixin, db.Model):
     posts = db.relationship('Post', backref='author', lazy='dynamic')
     about_me = db.Column(db.String(140))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # User Table Many-to-many followers relationship # pg 109
+    followed = db.relationship(
+        'User', secondary=followers,
+        primaryjoin=(followers.c.follower_id == id),
+        secondaryjoin=(followers.c.followed_id == id),
+        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -53,12 +60,22 @@ class User(UserMixin, db.Model):
         followers.c.followed_id == user.id).count() > 0 
 
 
-    # User Table Many-to-many followers relationship # pg 109
-    followed = db.relationship(
-        'User', secondary=followers,
-        primaryjoin=(followers.c.follower_id == id),
-        secondaryjoin=(followers.c.followed_id == id),
-        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+
+    # Followed posts query # pg 113
+    def followed_posts(self):
+        return Post.query.join(
+            followers, (followers.c.followed_id == Post.user_id)
+            ).filter(
+                followers.c.follower_id == self.id).order_by(
+                    Post.timestamp.desc())
+
+        # Followed posts query with users own posts # pg 117
+        followed = Post.query.join(
+            followers, (followers.c.followed_id == Post.user_id)
+        ).filter(
+            followers.c.follower_id == self.id)
+        own = Post.query.filter_by(user_id=self.id)
+        return followed.union(own).order_by(Post.timestamp.desc())
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -69,8 +86,9 @@ class Post(db.Model):
     def __repr__(self):
         return '<Post {}>'.format(self.body)
 
+'''
 class User(db.Model):
-    ''' IS THIS RIGHT OR SHOULD THIS GO UNDER 'class User(UserMixin, db.Model):'?? '''
+    '' IS THIS RIGHT OR SHOULD THIS GO UNDER 'class User(UserMixin, db.Model):'?? ''
     # Followed posts query # pg 113
     def followed_posts(self):
         return Post.query.join(
@@ -79,16 +97,15 @@ class User(db.Model):
                 followers.c.follower_id == self.id).order_by(
                     Post.timestamp.desc())
 
-    # combine self-created and followed posts # pg 117
-    def followed_posts(self):
+        # Followed posts query with users own posts # pg 117
         followed = Post.query.join(
             followers, (followers.c.followed_id == Post.user_id)
         ).filter(
             followers.c.follower_id == self.id)
         own = Post.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Post.timestamp.desc())
-
-
+        '''
+       
 @login.user_loader # decorator
 def load_user(id):
     ''' flask_login user loader function '''
