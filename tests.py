@@ -17,13 +17,13 @@ class UserModelCase(unittest.TestCase):
         db.drop_all()
 
     def test_password_hashing(self):
-        u = User(username='phil')
-        u.set_password('cat')
+        u = User(username='phil') # todo: change username??
+        u.set_password('cat') # todo: change password
         self.assertFalse(u.check_password('dog'))
         self.assertTrue(u.check_password('cat'))
     
     def test_avatar(self):
-        u = User(username='john', email='john@example.com') # Todo: need to change this or add john??
+        u = User(username='phil', email='philcurtis.io') # Todo: need to change this??
         self.assertEqual(u.avatar(128), (
             'https://www.gravatar.com/avatar/'
             'd4c74594d841139328695756648b6bd6'
@@ -31,8 +31,8 @@ class UserModelCase(unittest.TestCase):
             ) # Todo: need to change this??
 
     def test_follow(self):
-        u1 = User(username='john', email='john@example.com') # Todo: need to change this??
-        u2 = User(username='phil', email='philcurtis.io') # Todo: need to change this??
+        u1 = User(username='phil', email='philcurtis.io') # Todo: need to change this??
+        u2 = User(username='steph', email='steph@stephmn.com') # Todo: need to change this??
         db.session.add(u1)
         db.session.add(u2)
         db.session.commit()
@@ -45,7 +45,7 @@ class UserModelCase(unittest.TestCase):
         self.assertEqual(u1.is_followed.count(), 1)
         self.assertEqual(u1.followed.first().username, 'phil')
         self.assertEqual(u2.followers.count(), 1)
-        self.assertEqual(u2.followers.first().username, 'john')
+        self.assertEqual(u2.followers.first().username, 'steph')
 
         u1.unfollow(u2)
         
