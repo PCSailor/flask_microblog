@@ -39,20 +39,21 @@ class User(UserMixin, db.Model):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
 
-    def follow(self, user): # add/remove followers
+    # Add & remove followers # pg 111
+    def follow(self, user):
         if not self.is_following(user):
             self.followed.append(user)
     
-    def unfollow(self, user): # add/remove followers
+    def unfollow(self, user):
         if self.is_following(user):
             self.followed.remove(user)
     
-    def is_following(self, user): # add/remove followers
+    def is_following(self, user):
        return self.followed.filter(
         followers.c.followed_id == user.id).count() > 0 
 
 
-    # Many-to-many followers relationship
+    # User Table Many-to-many followers relationship # pg 109
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
@@ -67,6 +68,26 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
+
+class User(db.Model):
+    ''' IS THIS RIGHT OR SHOULD THIS GO UNDER 'class User(UserMixin, db.Model):'?? '''
+    # Followed posts query # pg 113
+    def followed_posts(self):
+        return Post.query.join(
+            followers, (followers.c.followed_id == Post.user_id)
+            ).filter(
+                followers.c.follower_id == self.id).order_by(
+                    Post.timestamp.desc())
+
+    # combine self-created and followed posts # pg 117
+    def followed_posts(self):
+        followed = Post.query.join(
+            followers, (followers.c.followed_id == Post.user_id)
+        ).filter(
+            followers.c.follower_id == self.id)
+        own = Post.query.filter_by(user_id=self.id)
+        return followed.union(own).order_by(Post.timestamp.desc())
+
 
 @login.user_loader # decorator
 def load_user(id):
