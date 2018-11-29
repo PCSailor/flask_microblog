@@ -59,23 +59,17 @@ class User(UserMixin, db.Model):
        return self.followed.filter(
         followers.c.followed_id == user.id).count() > 0 
 
-
-
-    # Followed posts query # pg 113
+    # Followed posts query with users own posts # pg 113 & 117
     def followed_posts(self):
-        return Post.query.join(
-            followers, (followers.c.followed_id == Post.user_id)
-            ).filter(
-                followers.c.follower_id == self.id).order_by(
-                    Post.timestamp.desc())
-
-        # Followed posts query with users own posts # pg 117
         followed = Post.query.join(
-            followers, (followers.c.followed_id == Post.user_id)
-        ).filter(
-            followers.c.follower_id == self.id)
+            followers, (followers.c.followed_id == Post.user_id)).filter(followers.c.follower_id == self.id)
         own = Post.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Post.timestamp.desc())
+
+# flask_login user loader function  # decorator is @...
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -85,28 +79,3 @@ class Post(db.Model):
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
-
-'''
-class User(db.Model):
-    '' IS THIS RIGHT OR SHOULD THIS GO UNDER 'class User(UserMixin, db.Model):'?? ''
-    # Followed posts query # pg 113
-    def followed_posts(self):
-        return Post.query.join(
-            followers, (followers.c.followed_id == Post.user_id)
-            ).filter(
-                followers.c.follower_id == self.id).order_by(
-                    Post.timestamp.desc())
-
-        # Followed posts query with users own posts # pg 117
-        followed = Post.query.join(
-            followers, (followers.c.followed_id == Post.user_id)
-        ).filter(
-            followers.c.follower_id == self.id)
-        own = Post.query.filter_by(user_id=self.id)
-        return followed.union(own).order_by(Post.timestamp.desc())
-        '''
-       
-@login.user_loader # decorator
-def load_user(id):
-    ''' flask_login user loader function '''
-    return User.query.get(int(id))
