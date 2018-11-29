@@ -56,4 +56,5 @@ if not app.debug:
     app.logger.setLevel(logging.INFO)
     app.logger.info('Microblog startup')
 
-from app import routes, models, errors #3 'app' refers to folder # routes always-at-bottom due to 'circular imports'
+ # 'app' refers to folder # routes always-at-bottom due to 'circular imports'
+from app import routes, models, errors
